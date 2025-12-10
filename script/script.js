@@ -14,9 +14,9 @@ let gameTimer = null;
 let timeRemaining = 0;
 const stageTimeLimits = {
     1: 40,  // 30초
-    2: 60,  // 50초
-    3: 130,  // 70초
-    4: 180, // 100초
+    2: 80,  // 00초
+    3: 140,  // 100초
+    4: 200, // 100초
     5: 250  // 130초
 };
 
