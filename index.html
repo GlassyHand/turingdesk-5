@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turing Desk</title>
+    <link rel="stylesheet" href="css/mainscreen.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/stageselector.css">
+    <link rel="stylesheet" href="css/story.css">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.min.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.min.js"></script>
+    
+</head>
+<body>
+    <script src="script/gameRules.js"></script>
+    <script src="script/map.js"></script>
+    <script src="script/script.js"></script>
+    <script src="script/sound.js"></script>
+    <script src="script/story.js"></script>
+    
+    <!-- 메인 화면 -->
+    <div id="main-screen" class="screen active">
+        <div class="main-container">
+            <h1 class="title">TURING DESK</h1>
+            <button id="start-btn" class="long-btn">START</button>
+        </div>
+    </div>
+
+    <!-- 스테이지 선택 화면 -->
+    <div id="stage-select-screen" class="screen">
+        <div class="stage-container">
+            <h2 class="screen-title">STAGE SELECT</h2>
+            <div class="stage-list">
+                <button class="stage-btn" data-stage="1" id="stage-1">1days</button>
+                <button class="stage-btn locked" data-stage="2" id="stage-2">???</button>
+                <button class="stage-btn locked" data-stage="3" id="stage-3">???</button>
+                <button class="stage-btn locked" data-stage="4" id="stage-4">???</button>
+                <button class="stage-btn locked" data-stage="5" id="stage-5">???</button>
+            </div>
+            <div class="stage-select-buttons">
+                <button id="back-to-main-btn" class="short-btn">BACK</button>
+                <button id="reset-btn" class="btn-reset">RESET</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 스토리 화면 -->
+    <div id="story-screen" class="screen">
+        <button id="story-skip-btn" class="short-btn">SKIP</button>
+        <!-- 배경 게임 화면 -->
+        <div class="story-background">
+            <div class="game-container">
+                <div class="game-header">
+                    <div class="game-info">
+                        <span class="green-text"><span id="story-current-day">1</span>days</span>
+                        <span class="green-text">SCORE: <span id="story-score">0</span></span>
+                        <span class="green-text">CORRECT: <span id="story-correct-count">0</span></span>
+                        <span class="green-text">WRONG: <span id="story-wrong-count">0</span></span>
+                    </div>
+                    <button id="exit-story-btn" class="exit-btn" title="나가기">
+                        <img width="24" height="24" src="https://img.icons8.com/material/24/FFFFFF/exit.png" alt="exit"/>
+                    </button>
+                </div>
+                <div class="game-content">
+                    <div id="story-game-area" class="game-area">
+                        <div class="left-column">
+                            <div class="visitor-display">
+                                <div id="story-visitor-sprite" class="visitor-sprite">
+                                    <div class="sprite-background"></div>
+                                    <div class="sprite-placeholder green-text">VISITOR</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="right-column">
+                            <div class="id-card-section">
+                                <img src="img/IDcard.png" class="id-card-img">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 어두운 오버레이 -->
+        <div class="story-overlay"></div>
+        <!-- 스토리 일러스트 오버레이 -->
+        <div id="story-illustration-overlay" class="story-illustration-overlay" style="display: none;">
+            <img id="story-illustration-img" class="story-illustration-img" src="" alt="Story Illustration">
+        </div>
+        <!-- 대화창 -->
+        <div class="story-dialog-box">
+            <div class="dialog-content">
+                <div id="character-portrait" class="character-portrait">
+                    <div class="portrait-placeholder"></div>
+                </div>
+                <div class="dialog-text-area">
+                    <div id="character-name" class="character-name green-text"></div>
+                    <div id="story-text" class="story-text green-text"></div>
+                </div>
+            </div>
+            <button id="story-next-btn" class="short-btn">NEXT</button>
+        </div>
+    </div>
+
+    <!-- 게임 화면 -->
+    <div id="game-screen" class="screen">
+        <!-- 게임 결과 오버레이 -->
+        <div id="game-result-overlay" class="game-result-overlay" style="display: none;">
+            <div class="result-overlay-background"></div>
+            <img id="result-gif" class="result-gif" src="" alt="Result">
+        </div>
+        <div class="game-container">
+            <div class="game-header-border">
+            <div class="game-header">
+                <div class="game-header-info">
+                    <span class="green-text"><span id="current-day">1</span> days</span>
+                    <span class="green-text">SCORE: <span id="score">0</span></span>
+                    <span class="green-text">CORRECT: <span id="correct-count">0</span></span>
+                    <span class="green-text">WRONG: <span id="wrong-count">0</span></span>
+                </div>
+                <button id="exit-game-btn" class="exit-btn" title="나가기">
+                    <img width="24" height="24" src="https://img.icons8.com/material/24/FFFFFF/exit.png" alt="exit"/>
+                </button>
+            </div>
+            </div>
+            <!-- 타임어택 바 -->
+            <div id="timer-container" class="timer-container">
+                <svg class="timer-svg" viewBox="-5 -5 110 110">
+                    <circle class="timer-bg" cx="50" cy="50" r="45"></circle>
+                    <circle class="timer-progress" cx="50" cy="50" r="45"></circle>
+                </svg>
+                <div class="timer-text">
+                    <span id="timer-seconds" class="green-text">30</span>
+                </div>
+            </div>
+            <div class="game-content">
+                <div id="game-area" class="game-area">
+                    <!-- 왼쪽 컬럼 -->
+                    <div class="left-column">
+                        <!-- 방문자 캐릭터 -->
+                        <div class="visitor-display">
+                            <div id="visitor-sprite" class="visitor-sprite">
+                                <div class="sprite-background"></div>
+                                <div id="character-standing" class="character-standing"></div>
+                                <div class="sprite-placeholder green-text">VISITOR</div>
+                                <!-- 대화 말풍선 컨테이너 -->
+                                <div id="dialogue-bubbles" class="dialogue-bubbles"></div>
+                            </div>
+                        </div>
+                        <!-- 통과/거부 버튼 -->
+                        <div class="decision-buttons">
+                            <button id="pass-btn" class="btn-pass"></button>
+                            <button id="reject-btn" class="btn-reject"></button>
+                        </div>
+                    </div>
+
+                    <!-- 오른쪽 컬럼 -->
+                    <div class="right-column">
+                        <!-- ID 카드 -->
+                            <div class="id-card-section">
+                                <img src="img/IDcard.png" class="id-card-img">
+                                <img id="character-profile" class="id-card-character-profile" src="" alt="Profile">
+                                <div class="id-card-overlay">
+                                        <div class="info-row">
+                                            <span class="info-label">&nbsp&nbsp&nbsp&nbsp<br><br></span>
+                                            <span id="id-name" class="info-value">-</span>
+                                        </div>
+                                        <div class="info-row">
+                                            <span class="info-label">&nbsp출신지:</span>
+                                            <span id="id-origin" class="info-value">-</span>
+                                        </div>
+                                        <div class="info-row">
+                                            <span class="info-label">&nbsp만료기한:</span>
+                                            <span id="id-expiry" class="info-value">-</span>
+                                        </div>
+                                </div>
+                            </div>
+                            <!-- 지도 섹션 (2days부터 표시) -->
+                            <div id="map-section" class="map-section" style="display: none;">
+                                <div id="map"></div>
+                            </div>
+                            <!-- 대화 선택지 섹션 (3days부터 표시) -->
+                            <div id="dialogue-section" class="dialogue-section" style="display: none;">
+                                <div class="dialogue-options">
+                                    <button class="dialogue-btn" data-option="1">1. 안녕하세요?</button>
+                                    <button class="dialogue-btn" data-option="2">2. 당신 모습에 이상한 게 보여요.</button>
+                                    <button class="dialogue-btn" data-option="3">3. 출신지가 어디세요?</button>
+                                </div>
+                            </div>
+                    </div>
+
+                                <!-- 메모 이미지 (오른쪽) -->
+                                <div class="memo-image">
+                                    <img id="memo-img" src="img/memo.png" alt="Memo" class="memo-img">
+                                    </div>
+                                </div>
+
+            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 정산 화면 -->
+    <div id="result-screen" class="screen">
+        <div class="result-container">
+            <h2 class="screen-title">RESULT</h2>
+            <div class="result-stats">
+                <div class="stat-item">
+                    <span class="stat-label">맞춘 횟수:</span>
+                    <span class="stat-value" id="result-correct">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">틀린 횟수:</span>
+                    <span class="stat-value" id="result-wrong">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">총합:</span>
+                    <span class="stat-value" id="result-total">0</span>
+                </div>
+            </div>
+            <div id="unlock-message" class="unlock-message"></div>
+            <div class="result-buttons">
+                <button id="retry-btn" class="long-btn">재시도</button>
+                <button id="stage-select-result-btn" class="long-btn">스테이지 고르기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 나가기 확인 다이얼로그 -->
+    <div id="exit-confirm-dialog" class="exit-dialog-overlay">
+        <div class="exit-dialog">
+            <h3 class="green-text">정말 나가시겠습니까?</h3>
+            <p class="green-text">스테이지 내의 진행도는 저장되지 않습니다.</p>
+            <div class="exit-dialog-buttons">
+                <button id="exit-confirm-yes" class="exit-dialog-btn">예</button>
+                <button id="exit-confirm-no" class="exit-dialog-btn">아니오</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+

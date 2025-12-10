@@ -1,0 +1,103 @@
+/* 화면 전환 */
+.screen {display: none;
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;}
+
+.screen.active {display: flex;
+    justify-content: center;
+    align-items: center;}
+
+/* 메인 화면 */
+.main-container {text-align: center;
+    animation: fadeIn 0.5s ease-in;}
+
+.title {font-size: 4rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5rem;
+    color: var(--main-color);
+    text-shadow: 
+        0 0 10px var(--main-color),
+        0 0 20px var(--main-color),
+        0 0 30px var(--main-color);
+    margin-bottom: 3rem;
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 
+            0 0 10px var(--main-color),
+            0 0 20px var(--main-color),
+            0 0 30px var(--main-color);
+    }
+    to {
+        text-shadow: 
+            0 0 20px var(--main-color),
+            0 0 30px var(--main-color),
+            0 0 40px var(--main-color),
+            0 0 50px var(--main-color);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* 버튼 스타일 */
+.long-btn {
+    background-color: transparent;
+    border: 2px solid var(--main-color);
+    color: var(--main-color);
+    padding: 1rem 3rem;
+    font-size: 1.2rem;
+    font-family: 'Galmuri14';
+    text-transform: uppercase;
+    letter-spacing: 0.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.long-btn:hover {
+    background-color: var(--main-color);
+    color: #000000;
+    box-shadow: 
+        0 0 20px rgba(0, 255, 65, 0.6),
+        inset 0 0 20px rgba(0, 255, 65, 0.2);
+    transform: translateY(-2px);
+}
+
+.long-btn:active {
+    transform: translateY(0);
+}
+
+.short-btn,
+#back-to-main-btn.short-btn {
+    background-color: transparent;
+    border: 2px solid var(--main-color);
+    color: var(--main-color);
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    font-family: 'Galmuri14';
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 5px rgba(0, 255, 65, 0.2);
+    margin-top: 1rem;
+    width: 120px;
+}
+
+.short-btn:hover {background-color: rgba(0, 255, 65, 0.1);
+    box-shadow: 0 0 15px rgba(0, 255, 65, 0.4);}
